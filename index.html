@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HNK 직캠 아카이브</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0f0d12; --panel:#18151d; --panel2:#211d28; --line:#2e2936;
+  --text:#f3eff6; --sub:#a59fae; --muted:#6f6879;
+  --green:#a6e35a; --pink:#ff7eb6; --split:linear-gradient(90deg,var(--green) 50%,var(--pink) 50%);
+  --accent:var(--green); --accent-soft:rgba(166,227,90,.14);
+  --radius:14px;
+}
+body[data-tab="hnk"]{--accent:#ffffff; --accent-soft:rgba(255,255,255,.12)}
+body[data-tab="eru"]{--accent:var(--green); --accent-soft:rgba(166,227,90,.14)}
+body[data-tab="aya"]{--accent:var(--pink); --accent-soft:rgba(255,126,182,.15)}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--text);font-family:"Noto Sans KR",system-ui,sans-serif;-webkit-font-smoothing:antialiased;transition:background .3s}
+a{color:inherit}
+.wrap{max-width:1440px;margin:0 auto;padding:0 24px}
+
+/* header */
+header{position:sticky;top:0;z-index:20;background:rgba(15,13,18,.86);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.top{display:flex;align-items:center;gap:20px;height:64px}
+.logo{font-weight:900;letter-spacing:-.02em;font-size:20px;white-space:nowrap}
+.logo b{color:var(--accent);transition:color .3s}
+.logo{display:flex;align-items:center;gap:12px}
+.logo-img{width:64px;height:64px;flex-shrink:0;border-radius:12px;background:#ffffff;object-fit:cover;box-shadow:0 0 0 1px var(--line)}
+.logo small{font-weight:500;color:var(--muted);font-size:12px;margin-left:8px}
+nav.tabs{display:flex;gap:6px;margin-left:auto}
+.tab{appearance:none;border:1px solid var(--line);background:transparent;color:var(--sub);padding:9px 18px;border-radius:999px;font:inherit;font-weight:700;font-size:15px;cursor:pointer;display:flex;align-items:center;gap:8px;transition:.2s}
+.tab:hover{color:var(--text);border-color:#4a4354}
+.tab .n{font-size:12px;font-weight:500;color:var(--muted)}
+.tab[aria-selected="true"]{background:var(--accent);border-color:var(--accent);color:#16121a}
+.tab[aria-selected="true"] .n{color:rgba(22,18,26,.7)}
+
+/* hero */
+.hero{padding:36px 0 8px}
+.hero h1{margin:0;font-size:clamp(28px,4vw,44px);font-weight:900;letter-spacing:-.03em}
+.hero h1 span{color:var(--accent);transition:color .3s}
+/* 히노나카: 연두 + 핑크 반반 */
+.logo b{background:var(--split);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{margin:8px 0 0;color:var(--sub);font-size:15px;line-height:1.6}
+
+/* toolbar */
+.toolbar{display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:20px 0 18px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{appearance:none;border:1px solid var(--line);background:var(--panel);color:var(--sub);padding:7px 14px;border-radius:999px;font:inherit;font-size:13px;font-weight:500;cursor:pointer;transition:.15s}
+.chip:hover{color:var(--text)}
+.chip[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+.chip .n{opacity:.7;margin-left:4px}
+.spacer{flex:1}
+.search{position:relative}
+.search input{width:240px;max-width:100%;background:var(--panel);border:1px solid var(--line);color:var(--text);border-radius:999px;padding:9px 14px 9px 36px;font:inherit;font-size:14px;outline:none}
+.search input:focus{border-color:var(--accent)}
+.search svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted)}
+select{background:var(--panel);border:1px solid var(--line);color:var(--text);border-radius:999px;padding:9px 14px;font:inherit;font-size:14px;outline:none;cursor:pointer}
+.count{color:var(--muted);font-size:13px;width:100%;margin-top:-4px}
+
+/* grid: 4 columns on desktop, fewer on smaller screens */
+.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:28px 20px;padding-bottom:40px}
+@media (max-width:1180px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:860px){.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:22px 14px}}
+@media (max-width:520px){.grid{grid-template-columns:1fr}}
+
+.card{cursor:pointer;outline:none;border-radius:var(--radius)}
+.thumb{position:relative;aspect-ratio:16/9;border-radius:var(--radius);overflow:hidden;background:var(--panel2);border:1px solid var(--line);transition:transform .2s, box-shadow .2s, border-color .2s}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:opacity .25s}
+.card:hover .thumb,.card:focus-visible .thumb{transform:translateY(-3px);border-color:var(--accent);box-shadow:0 10px 30px -10px var(--accent-soft),0 0 0 1px var(--accent)}
+.play{position:absolute;inset:0;display:grid;place-items:center;opacity:0;transition:opacity .2s;background:linear-gradient(transparent 40%,rgba(0,0,0,.45))}
+.play i{width:52px;height:52px;border-radius:50%;background:var(--accent);display:grid;place-items:center;box-shadow:0 6px 20px rgba(0,0,0,.4)}
+.card:hover .play,.card:focus-visible .play{opacity:1}
+.badges{position:absolute;left:8px;top:8px;display:flex;gap:4px}
+.badge{font-size:11px;font-weight:700;padding:3px 7px;border-radius:6px;background:rgba(0,0,0,.72);color:#fff;backdrop-filter:blur(4px)}
+.badge.acc{background:var(--accent);color:#16121a}
+.dur{position:absolute;right:8px;bottom:8px;font-size:12px;font-weight:700;padding:2px 6px;border-radius:5px;background:rgba(0,0,0,.8);color:#fff}
+.prog{position:absolute;left:0;bottom:0;height:3px;background:var(--accent);width:0}
+.card:hover .prog{animation:prog 2.4s linear infinite}
+@keyframes prog{from{width:0}to{width:100%}}
+.meta{padding:12px 2px 0}
+.title{margin:0;font-size:14.5px;font-weight:700;line-height:1.45;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;word-break:break-all}
+.info{margin-top:6px;font-size:12.5px;color:var(--sub);display:flex;flex-wrap:wrap;gap:4px 8px}
+.info .ch{color:var(--text);opacity:.85}
+.info .dot{color:var(--muted)}
+.empty{grid-column:1/-1;text-align:center;color:var(--muted);padding:80px 0}
+.more{display:block;margin:0 auto 60px;appearance:none;border:1px solid var(--line);background:var(--panel);color:var(--text);padding:12px 28px;border-radius:999px;font:inherit;font-weight:700;cursor:pointer}
+.more:hover{border-color:var(--accent);color:var(--accent)}
+
+/* modal */
+.modal{position:fixed;inset:0;z-index:50;background:rgba(5,4,8,.86);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;padding:24px}
+.modal.open{display:flex}
+.mbox{width:min(1100px,100%);background:var(--panel);border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.6)}
+.player{aspect-ratio:16/9;background:#000}
+.player iframe{width:100%;height:100%;border:0;display:block}
+.mfoot{display:flex;align-items:flex-start;gap:16px;padding:16px 20px}
+.mfoot h3{margin:0;font-size:16px;line-height:1.45}
+.mfoot .info{margin-top:6px}
+.mfoot .actions{margin-left:auto;display:flex;gap:8px;flex-shrink:0}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:10px 16px;border-radius:10px;font-weight:700;font-size:14px;text-decoration:none;border:1px solid var(--line);background:var(--panel2);color:var(--text);cursor:pointer;font-family:inherit}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#16121a}
+footer{border-top:1px solid var(--line);color:var(--muted);font-size:12.5px;padding:24px 0 40px;line-height:1.7}
+
+@media (max-width:760px){
+  .wrap{padding:0 16px}
+  .top{height:auto;flex-wrap:wrap;padding-top:12px;padding-bottom:12px;gap:10px}
+  .logo small{display:block;margin:2px 0 0}
+  nav.tabs{margin-left:0;width:100%}
+  .tab{flex:1;justify-content:center;padding:8px 10px;font-size:14px}
+  .search,.search input{width:100%}
+  .spacer{display:none}
+  .mfoot{flex-direction:column}
+  .mfoot .actions{margin-left:0}
+  .modal{padding:10px}
+}
+</style>
+</head>
+<body data-tab="hnk">
+<header>
+  <div class="wrap top">
+    <div class="logo"><img class="logo-img" src="hnk-logo.png" alt="HNK 히노나카 로고" width="64" height="64"><span>직캠 아카이브<small id="updated"></small></span></div>
+    <nav class="tabs" role="tablist">
+      <button class="tab" role="tab" data-tab="hnk">히노나카 <span class="n"></span></button>
+      <button class="tab" role="tab" data-tab="eru">에루 <span class="n"></span></button>
+      <button class="tab" role="tab" data-tab="aya">아야 <span class="n"></span></button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <h1 id="heroTitle"></h1>
+    <p id="heroDesc"></p>
+  </section>
+
+  <div class="toolbar">
+    <div class="chips" id="chips"></div>
+    <div class="spacer"></div>
+    <label class="search">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="q" type="search" placeholder="곡명, 공연명, 채널 검색">
+    </label>
+    <select id="sort" aria-label="정렬">
+      <option value="new">최신순</option>
+      <option value="old">오래된순</option>
+      <option value="views">조회수순</option>
+    </select>
+    <div class="count" id="count"></div>
+  </div>
+
+  <div class="grid" id="grid"></div>
+  <button class="more" id="more" hidden>더 보기</button>
+</main>
+
+<footer>
+  <div class="wrap">
+    유튜브 공개 검색 결과에서 모은 팬 촬영 영상(직캠·풀캠·세로캠) 목록입니다. 썸네일에 마우스를 올리면 장면이 바뀌며 미리보기가 나오고, 클릭하면 이 페이지 안에서 바로 재생됩니다.<br>
+    영상 저작권은 각 촬영자/채널에 있습니다. 에루의 "이전 그룹" 영상(S2KIDA·Acrylic Palette)은 같은 촬영자·활동명을 근거로 동일인으로 추정해 넣었습니다.
+  </div>
+</footer>
+
+<div class="modal" id="modal" role="dialog" aria-modal="true">
+  <div class="mbox">
+    <div class="player" id="player"></div>
+    <div class="mfoot">
+      <div>
+        <h3 id="mTitle"></h3>
+        <div class="info" id="mInfo"></div>
+      </div>
+      <div class="actions">
+        <a class="btn primary" id="mLink" target="_blank" rel="noopener">YouTube에서 보기 ↗</a>
+        <button class="btn" id="mClose">닫기</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="data.js"></script>
+<script>
+const TABS = {
+  hnk: { title: '<span>히노나카</span> 단체 · 풀캠', desc: '히노나카(HNK) 단체 무대, 공연 풀버전, 전체캠 모음.',
+    chips: [['all','전체'],['full','풀캠·전체캠',v=>v.kind==='full'],['vert','세로캠',v=>v.vert]] },
+  eru: { title: '<span>에루</span> 직캠', desc: '히노나카 에루(える) 개인 직캠·세로캠, 그리고 히노나카 이후 솔로 활동과 이전 그룹 영상까지 모았습니다.',
+    chips: [['all','전체'],['hnk','히노나카',v=>v.sub==='hnk'],['solo','솔로 (2026~)',v=>v.sub==='solo'],['prev','이전 그룹',v=>v.sub==='prev'],['vert','세로캠',v=>v.vert]] },
+  aya: { title: '<span>아야</span> 직캠', desc: '히노나카 아야(あや) 개인 직캠·세로캠·교차편집 모음.',
+    chips: [['all','전체'],['vert','세로캠',v=>v.vert],['full','풀캠',v=>v.kind==='full']] },
+};
+const PAGE = 48;
+const state = { tab:'hnk', chip:'all', q:'', sort:'new', shown:PAGE };
+const $ = s => document.querySelector(s);
+const esc = s => s.replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const viewsNum = v => { const m=(v.views||'').replace(/[^\d.만천]/g,''); let n=parseFloat(m)||0; if(/만/.test(m))n*=1e4; else if(/천/.test(m))n*=1e3; return n; };
+const fmtDate = v => v.d ? v.d.replace(/-/g,'.') : v.rel;
+const ofTab = t => VIDEOS.filter(v => v.tabs.includes(t));
+
+$('#updated').textContent = '· ' + UPDATED.replace(/-/g,'.') + ' 기준';
+document.querySelectorAll('.tab').forEach(b => b.querySelector('.n').textContent = ofTab(b.dataset.tab).length);
+
+function list(){
+  const def = TABS[state.tab];
+  const chip = def.chips.find(c => c[0]===state.chip);
+  let arr = ofTab(state.tab);
+  if (chip && chip[2]) arr = arr.filter(chip[2]);
+  const q = state.q.trim().toLowerCase();
+  if (q) arr = arr.filter(v => (v.t+' '+v.ch).toLowerCase().includes(q));
+  arr = arr.slice();
+  if (state.sort==='old') arr.sort((a,b)=>(a.d||'9').localeCompare(b.d||'9'));
+  else if (state.sort==='views') arr.sort((a,b)=>viewsNum(b)-viewsNum(a));
+  else arr.sort((a,b)=>(b.d||'0').localeCompare(a.d||'0'));
+  return arr;
+}
+
+function card(v){
+  const badges = [];
+  if (v.sub==='solo') badges.push('<span class="badge acc">솔로</span>');
+  if (v.sub==='prev') badges.push('<span class="badge acc">이전 그룹</span>');
+  if (v.kind==='full') badges.push('<span class="badge">풀캠</span>');
+  if (v.vert) badges.push('<span class="badge">세로</span>');
+  return `<article class="card" tabindex="0" data-id="${v.id}">
+    <div class="thumb">
+      <img loading="lazy" src="https://i.ytimg.com/vi/${v.id}/mqdefault.jpg" alt="">
+      <div class="badges">${badges.join('')}</div>
+      ${v.len ? `<span class="dur">${esc(v.len)}</span>` : ''}
+      <div class="play"><i><svg width="20" height="20" viewBox="0 0 24 24" fill="#16121a"><path d="M8 5v14l11-7z"/></svg></i></div>
+      <div class="prog"></div>
+    </div>
+    <div class="meta">
+      <h3 class="title" title="${esc(v.t)}">${esc(v.t)}</h3>
+      <div class="info"><span class="ch">${esc(v.ch)}</span><span class="dot">·</span><span>${esc(fmtDate(v))}</span>${v.views?`<span class="dot">·</span><span>${esc(v.views)}</span>`:''}</div>
+    </div>
+  </article>`;
+}
+
+function render(){
+  const def = TABS[state.tab];
+  document.body.dataset.tab = state.tab;
+  document.querySelectorAll('.tab').forEach(b => b.setAttribute('aria-selected', b.dataset.tab===state.tab));
+  $('#heroTitle').innerHTML = def.title;
+  $('#heroDesc').textContent = def.desc;
+  const base = ofTab(state.tab);
+  $('#chips').innerHTML = def.chips.map(([k,l,f]) => {
+    const n = f ? base.filter(f).length : base.length;
+    if (!n && k!=='all') return '';
+    return `<button class="chip" data-chip="${k}" aria-pressed="${state.chip===k}">${l}<span class="n">${n}</span></button>`;
+  }).join('');
+  const arr = list();
+  $('#count').textContent = `${arr.length}개 영상`;
+  $('#grid').innerHTML = arr.length ? arr.slice(0, state.shown).map(card).join('') : '<div class="empty">조건에 맞는 영상이 없습니다.</div>';
+  $('#more').hidden = arr.length <= state.shown;
+  $('#more').textContent = `더 보기 (${arr.length - state.shown}개 남음)`;
+}
+
+function setTab(t){
+  if (!TABS[t]) t='hnk';
+  Object.assign(state, { tab:t, chip:'all', shown:PAGE });
+  if (location.hash.slice(1)!==t) history.replaceState(null,'','#'+t);
+  render(); window.scrollTo({top:0});
+}
+
+document.querySelectorAll('.tab').forEach(b => b.onclick = () => setTab(b.dataset.tab));
+$('#chips').onclick = e => { const c=e.target.closest('.chip'); if(!c) return; state.chip=c.dataset.chip; state.shown=PAGE; render(); };
+$('#q').oninput = e => { state.q=e.target.value; state.shown=PAGE; render(); };
+$('#sort').onchange = e => { state.sort=e.target.value; render(); };
+$('#more').onclick = () => { state.shown += PAGE; render(); };
+
+/* hover preview: cycle through YouTube's auto-generated frames 1~3 */
+let hoverTimer=null;
+$('#grid').addEventListener('mouseover', e => {
+  const c = e.target.closest('.card'); if (!c || c===hoverTimer?.card) return;
+  stopHover();
+  const img = c.querySelector('img'); const id = c.dataset.id; let i = 0;
+  const frames = [1,2,3].map(n=>`https://i.ytimg.com/vi/${id}/mq${n}.jpg`);
+  frames.forEach(src => { const p=new Image(); p.src=src; });
+  hoverTimer = { card:c, img, t: setInterval(() => { img.src = frames[i++ % 3]; }, 800) };
+});
+$('#grid').addEventListener('mouseout', e => {
+  const c = e.target.closest('.card'); if (c && !c.contains(e.relatedTarget)) stopHover();
+});
+function stopHover(){ if(!hoverTimer) return; clearInterval(hoverTimer.t); hoverTimer.img.src=`https://i.ytimg.com/vi/${hoverTimer.card.dataset.id}/mqdefault.jpg`; hoverTimer=null; }
+
+/* modal player */
+function openVideo(id){
+  const v = VIDEOS.find(x=>x.id===id); if(!v) return;
+  $('#player').innerHTML = `<iframe src="https://www.youtube.com/embed/${id}?autoplay=1&rel=0" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" referrerpolicy="strict-origin-when-cross-origin"></iframe>`;
+  $('#mTitle').textContent = v.t;
+  $('#mInfo').innerHTML = `<span class="ch">${esc(v.ch)}</span><span class="dot">·</span><span>${esc(fmtDate(v))}</span>${v.views?`<span class="dot">·</span><span>${esc(v.views)}</span>`:''}`;
+  $('#mLink').href = `https://www.youtube.com/watch?v=${id}`;
+  $('#modal').classList.add('open'); document.body.style.overflow='hidden';
+}
+function closeVideo(){ $('#modal').classList.remove('open'); $('#player').innerHTML=''; document.body.style.overflow=''; }
+$('#grid').addEventListener('click', e => { const c=e.target.closest('.card'); if(c){ stopHover(); openVideo(c.dataset.id); } });
+$('#grid').addEventListener('keydown', e => { if(e.key==='Enter'){ const c=e.target.closest('.card'); if(c) openVideo(c.dataset.id); } });
+$('#mClose').onclick = closeVideo;
+$('#modal').onclick = e => { if (e.target.id==='modal') closeVideo(); };
+addEventListener('keydown', e => { if (e.key==='Escape') closeVideo(); });
+addEventListener('hashchange', () => setTab(location.hash.slice(1)));
+
+setTab(location.hash.slice(1) || 'hnk');
+</script>
+</body>
+</html>
