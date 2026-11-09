@@ -158,8 +158,8 @@ footer{border-top:1px solid var(--line);color:var(--muted);font-size:12.5px;padd
 
 <footer>
   <div class="wrap">
-    유튜브 공개 검색 결과에서 모은 팬 촬영 영상(직캠·풀캠·세로캠) 목록입니다. 썸네일에 마우스를 올리면 장면이 바뀌며 미리보기가 나오고, 클릭하면 이 페이지 안에서 바로 재생됩니다.<br>
-    영상 저작권은 각 촬영자/채널에 있습니다. 에루의 "이전 그룹" 영상(S2KIDA·Acrylic Palette)은 같은 촬영자·활동명을 근거로 동일인으로 추정해 넣었습니다.
+    유튜브 공개 검색 결과에서 모은 팬 촬영 영상(직캠·풀캠·세로캠) 목록입니다.<br>
+    영상 저작권은 각 촬영자/채널에 있습니다.
   </div>
 </footer>
 
@@ -182,11 +182,11 @@ footer{border-top:1px solid var(--line);color:var(--muted);font-size:12.5px;padd
 <script src="data.js"></script>
 <script>
 const TABS = {
-  hnk: { title: '<span>히노나카</span> 단체 · 풀캠', desc: '히노나카(HNK) 단체 무대, 공연 풀버전, 전체캠 모음.',
+  hnk: { title: '<span>히노나카</span> 단체 · 풀캠', desc: '히노나카(HNK) 전체캠 모음.',
     chips: [['all','전체'],['full','풀캠·전체캠',v=>v.kind==='full'],['vert','세로캠',v=>v.vert]] },
-  eru: { title: '<span>에루</span> 직캠', desc: '히노나카 에루(える) 개인 직캠·세로캠, 그리고 히노나카 이후 솔로 활동과 이전 그룹 영상까지 모았습니다.',
+  eru: { title: '<span>에루</span> 직캠', desc: '히노나카 에루(える) 개인 직캠',
     chips: [['all','전체'],['hnk','히노나카',v=>v.sub==='hnk'],['solo','솔로 (2026~)',v=>v.sub==='solo'],['prev','이전 그룹',v=>v.sub==='prev'],['vert','세로캠',v=>v.vert]] },
-  aya: { title: '<span>아야</span> 직캠', desc: '히노나카 아야(あや) 개인 직캠·세로캠·교차편집 모음.',
+  aya: { title: '<span>아야</span> 직캠', desc: '히노나카 아야(あや) 개인 직캠',
     chips: [['all','전체'],['vert','세로캠',v=>v.vert],['full','풀캠',v=>v.kind==='full']] },
 };
 const PAGE = 48;
